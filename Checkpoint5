@@ -1,0 +1,264 @@
+# Checkpoint 5
+
+## Teoría
+
+1. ### ¿Qué es un condicional?
+
+Las condicionales son mecanismos fundamentales que permiten la bifurcación del flujo de ejecución de un programa. Estas estructuras posibilitan la toma de decisiones algorítmicas basadas en la evaluación de expresiones booleanas, cuyos resultados determinan el bloque de instrucciones específico que el intérprete procesará a continuación. La correcta implementación de estas bifurcaciones es lo que permite que un software pase de ser una secuencia lineal de comandos a un sistema dinámico capaz de reaccionar ante diversas entradas y estados internos.
+
+A diferencia de otros lenguajes de programación que emplean delimitadores explícitos o caracteres especiales, tales como llaves o palabras clave de cierre (`end if`), Python se distingue por el uso de la **indentación obligatoria**. Este requisito sintáctico no solo favorece una legibilidad superior y una estética uniforme en el código fuente, sino que define estrictamente el alcance (*scope*) y la jerarquía de cada bloque lógico.
+
+La ausencia de una alineación espacial precisa o la mezcla de espacios y tabuladores puede derivar en errores de ejecución fatales o, en el peor de los casos, en un comportamiento imprevisto del software que es extremadamente difícil de depurar. La indentación le indica al intérprete exactamente dónde termina la influencia de una decisión y dónde se retoma el flujo principal del programa.
+
+**Componentes de la Estructura Condicional**
+
+Para crear una condicional utilizamos una estructura que se basa en las siguientes sentencias, que son las que el camino se bifurca (son lo que podemos llamar realmente “condicionales” en un sentido gramatical)
+
+*   **Sentencia `if` (Si...):** Es el punto de entrada. Evalúa una condición inicial. Si el resultado es verdadero, el intérprete accede al bloque de código indentado.
+*   **Sentencia `elif` (Si no, si...):** Abreviatura de *else if*. Permite encadenar múltiples condiciones de forma jerárquica. Se pueden tener n cantidad de `elif`, pero solo se ejecutará el primero cuya condición sea verdadera, ignorando el resto.
+*   **Sentencia `else` (En otro caso):** Es la cláusula de cierre o "ruta por defecto". Se ejecuta únicamente si ninguna de las condiciones anteriores (`if` o `elif`) se cumplió.
+
+### **Operadores Relacionales y Lógicos**
+
+La construcción de predicados lógicos precisos depende del uso de los operadores de comparación y lógicos, que actúan como filtros de decisión del algoritmo:
+
+1.  **Operadores de Comparación:** `==` (igualdad), `!=` (diferencia), `>`, `<`, `>=` y `<=`.  
+2.  **Operadores Lógicos:** `and` (conjunción), `or` (disyunción) y `not` (negación), que permiten construir condiciones complejas en una sola línea.
+
+El intérprete de Python implementa una técnica denominada **evaluación perezosa** o de cortocircuito. Este mecanismo dicta que, en una expresión lógica `OR`, si el primer término evaluado resulta ser verídico, se confirma la validez de la expresión completa de forma instantánea sin procesar los términos restantes. De manera análoga, en una expresión `AND`, si el primer componente es detectado como falso, la evaluación cesa de inmediato.
+
+Esta característica no es solo una cuestión de eficiencia; es crítica para la robustez del código. Permite, por ejemplo, verificar si una variable no es nula antes de intentar acceder a uno de sus métodos en la misma línea de código, previniendo así excepciones de tipo `AttributeError` o `NoneType`.
+
+| Categoría | Configuración Lógica | Aplicación Técnica y Consecuencias |
+| ----- | ----- | ----- |
+| Simple | Bloque `if` único | Se utiliza para ejecuciones atómicas condicionadas a un único factor determinante que no requiere una alternativa inmediata. |
+| Doble | Binomio `if-else` | Implementación de lógica binaria pura o excluyente, donde el sistema debe elegir obligatoriamente entre dos trayectorias (A o B). |
+| Múltiple | Cadena `if-elif-else` | Selección estratégica de una trayectoria única entre múltiples escenarios mutuamente excluyentes, ideal para menús de opciones o estados de sensores. |
+| Anidada | Estructuras `if` jerarquizadas | Utilizada para resolver dependencias lógicas complejas de segundo orden, donde una decisión sólo es relevante si una condición superior ha sido previamente satisfecha. |
+
+El siguiente ejemplo detallado, donde se evalúa el estado operativo de un sensor crítico en relación con un umbral de seguridad predefinido y se determinan las consecuencias operativas:
+
+| # Definición de parámetros del sistema y estados de entorno limite_maximo = 100 valor_actual = 85 sistema_en_linea = True  # Evaluación multifactorial de seguridad if sistema_en_linea and valor_actual > limite_maximo:     # Acción correctiva inmediata ante excedencia de umbral crítico     # Consecuencia: El flujo se desvía a protocolos de mitigación de riesgo.     print("Protocolo de emergencia: Valor fuera de parámetros de seguridad. Iniciando purga.") elif sistema_en_linea and valor_actual == limite_maximo:     # Estado de alerta preventiva por saturación del límite     # Consecuencia: Se emite una advertencia sin interrumpir el proceso.     print("Notificación: El sistema ha alcanzado el límite operativo. Monitoreo intensivo activo.") else:     # Estado operativo nominal o sistema fuera de línea     # Consecuencia: Se mantiene la estabilidad del proceso estándar.     print("Estado del sistema: Operación estable dentro de los rangos permitidos.") |
+| :---- |
+
+### 2. ¿Cuáles son los diferentes tipos de bucles en Python? ¿Por qué son útiles?
+
+Un **bucle** o ciclo de iteración es una estructura de control que permite la ejecución repetitiva de un bloque de instrucciones. Son fundamentales para procesar colecciones de datos, implementar algoritmos de aproximación o mantener servicios en ejecución constante. En Python, la iteración se gestiona mediante dos paradigmas principales: la iteración sobre objetos iterables y la iteración basada en estados lógicos.
+
+#### A. Bucle `for` (Iteración Definida)
+
+El bucle **`for`** en Python es, en realidad, un iterador de colecciones. A diferencia de otros lenguajes donde se basa en un contador numérico, en Python recorre los elementos de cualquier objeto iterable (listas, tuplas, diccionarios, cadenas o rangos).
+
+*   **Mecánica interna**: Utiliza el protocolo de iteración de Python, llamando internamente al método `__next__()` hasta que se agotan los elementos.
+
+*   **Caso de uso**: Procesamiento de arreglos, filtrado de datos y ejecución de tareas donde el número de repeticiones está predefinido por el tamaño de la fuente de datos.
+
+| # Iteración sobre una secuencia numérica definida for i in range(5):     # El valor de 'i' cambia en cada paso de la iteración     print(f"Iteración número: {i}") |
+| :---- |
+
+#### B. Bucle `while` (Iteración Indefinida)
+
+El bucle **`while`** ejecuta un bloque de código mientras una **condición booleana** específica se evalúe como **True**.
+
+*   **Mecánica interna:** Evalúa la expresión lógica antes de cada iteración. Si la condición es falsa desde el inicio, el bloque nunca se ejecuta.  
+*   **Caso de uso:** Bucles de eventos (*event loops*), procesos que dependen de una entrada externa (como un sensor o un usuario) y algoritmos donde el punto de finalización no es una cantidad fija, sino un estado del sistema.
+
+| # Ejecución basada en un estado lógico contador = 0 while contador < 5:     print(f"Contador activo: {contador}")     contador += 1 # Incremento crítico para evitar bucles infinitos |
+| :---- |
+
+La implementación de bucles es esencial por las siguientes razones:
+
+1.  **Automatización y Eficiencia:** Permiten procesar volúmenes masivos de datos (Big Data) con un código mínimo, reduciendo la redundancia y el error humano.  
+2.  **Complejidad Algorítmica:** Son la base para implementar algoritmos con diferentes complejidades temporales, desde **$O(n)$** en búsquedas lineales hasta **$O(n^2)$** en ordenamientos simples.  
+3.  **Gestión de Recursos:** Facilitan el manejo de flujos de datos continuos (*streams*) y la comunicación entre procesos que requieren espera activa o reintentos.
+
+#### Control del flujo: `break`, `continue` y `else`
+
+Python ofrece palabras clave para alterar el comportamiento natural de los ciclos:
+
+*   **`break`:** Finaliza el bucle de forma inmediata, saltando a la primera instrucción fuera de él.  
+*   **`continue`:** Omite el resto del código en la iteración actual y salta directamente a la siguiente evaluación de la condición.  
+*   **Cláusula `else` en bucles:** Una característica única de Python. El bloque `else` se ejecuta solo si el bucle termina de forma natural (es decir, **no** fue interrumpido por un `break`). Es extremadamente útil para algoritmos de búsqueda.
+
+| # Ejemplo de búsqueda técnica con cláusula else objetivo = "datos_criticos" lista_recursos = ["recurso_1", "recurso_2", "datos_criticos", "recurso_3"] for recurso in lista_recursos:     if recurso == objetivo:         print("Recurso localizado.")         break # Interrupción exitosa else:     # Este bloque solo se ejecuta si el 'for' recorrió todo sin hallar el objetivo     print("Error: Recurso no encontrado en la base de datos.") |
+| :---- |
+
+### 3. ¿Qué es una lista por comprensión en Python?
+
+Una **lista por comprensión** (*List Comprehension*) es un constructo sintáctico diseñado para la creación de nuevas listas a partir de iterables existentes. Más allá de ser una "abreviatura" de un bucle **`for`**, representa una implementación optimizada que permite realizar transformaciones y filtrados de datos en una sola línea de instrucción.
+
+#### Estructura
+
+La estructura de una lista por comprensión se define entre corchetes `[ ]` y se compone de tres partes:
+
+1.  **Expresión:** El valor resultante o la transformación que se aplicará a cada elemento.  
+2.  **Componente `for`:** La declaración de la variable temporal y el objeto iterable original.  
+3.  **Cláusula `if` (Opcional):** Un predicado lógico que filtra qué elementos del iterable original serán procesados.
+
+**Sintaxis General:** 
+
+| `nueva_lista = [expresión for elemento in iterable if condición]` |
+| :---- |
+
+##### Ejemplo:
+
+| # Generación de una secuencia de cuadrados de números pares cuadrados_pares = [x**2 for x in range(10) if x % 2 == 0] # Resultado esperado: [0, 4, 16, 36, 64] |
+| :---- |
+
+#### Ventajas
+
+El uso de listas por comprensión no responde únicamente a una preferencia estética ( para tener un código más "limpio"):
+
+*   **Optimización a nivel de Bytecode:** A diferencia de un bucle `for` tradicional que requiere llamadas repetidas al método `.append()`, la lista por comprensión se ejecuta a una velocidad cercana a la del lenguaje C subyacente de Python. Esto se debe a que la construcción de la lista ocurre dentro del intérprete de forma optimizada.  
+*   **Declaratividad:** El código describe *qué* se quiere obtener en lugar de detallar paso a paso *cómo* construirlo, lo que facilita el mantenimiento y la auditoría del software.  
+*   **Reducción de Efectos Secundarios:** Al evitar la creación manual de listas vacías y llamadas a métodos externos dentro de un ciclo, se minimiza la posibilidad de errores de estado.
+
+#### Listas por Comprensión Anidadas (nesting)
+
+Es posible anidar estas listas para procesar matrices o estructuras multidimensionales. Sin embargo, se recomienda precaución: si la expresión excede las dos líneas de longitud, la legibilidad puede verse comprometida.
+
+| # Aplanamiento de una matriz (Matrix Flattening) matriz = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] lista_plana = [num for fila in matriz for num in fila]  # Resultado: [1, 2, 3, 4, 5, 6, 7, 8, 9] |
+| :---- |
+
+### 4. ¿Qué es un argumento en Python?
+
+En Python, la transferencia de información hacia las funciones se realiza mediante **argumentos**. Un argumento es el valor real que se suministra a una función al ser invocada. La mecánica de los argumentos es crucial para diseñar funciones modulares y reutilizables.
+
+#### Parámetros vs. Argumentos: Una Distinción Semántica
+
+Es común utilizar estos términos como sinónimos, pero en la documentación técnica se diferencian estrictamente:
+
+*   **Parámetro:** Es la variable definida en la firma o declaración de la función (el "contenedor").  
+*   **Argumento:** Es el valor o dato real que se pasa a la función durante su llamada (el "contenido").
+
+| def calcular_area(base, altura): # 'base' y 'altura' son parámetros     return base * altura resultado = calcular_area(10, 5) # '10' y '5' son argumentos |
+| :---- |
+
+#### Tipos de Argumentos
+
+Python permite diversos tipos de argumentos:
+
+##### A. Argumentos Posicionales
+
+Son los más comunes; su valor se asigna al parámetro correspondiente según el orden en que se pasan. un cambio en el orden altera completamente el comportamiento de la función.
+
+##### B. Argumentos de Palabra Clave (Keywords)
+
+Se pasan indicando explícitamente el nombre del parámetro (`nombre_parametro=valor`). Esto permite ignorar el orden de los parámetros y mejora significativamente la legibilidad del código.
+
+| # Uso de argumentos nominales para mayor claridad configurar_servidor(puerto=8080, host="localhost", reintentos=3) |
+| :---- |
+
+##### C. Argumentos por Defecto (Default Arguments)
+
+Permiten asignar valores predeterminados a los parámetros en la definición de la función. Si el argumento no se proporciona en la llamada, se utiliza el valor por defecto.
+
+#### Argumentos de Longitud Variable: `*args` y `**kwargs`
+
+Para funciones que requieren una flexibilidad total en el número de entradas, Python implementa dos mecanismos de empaquetado:
+
+1.  **`*args` (Non-keyword arguments):** Recibe un número arbitrario de argumentos posicionales y los almacena en una **tupla**.  
+2.  **`**kwargs` (Keyword arguments):** Recibe un número arbitrario de argumentos nominales y los almacena en un **diccionario**.
+
+Esta capacidad es fundamental para el desarrollo de decoradores, wrappers de API y funciones que actúan como intermediarias entre diferentes módulos.
+
+#### Paso por Asignación (Call by Object Reference)
+
+A nivel de memoria, Python no utiliza estrictamente el "paso por valor" ni el "paso por referencia". Utiliza el **paso por asignación**:
+
+*   Si el objeto pasado es **inmutable** (como un entero o una cadena), se comporta de forma similar al paso por valor.  
+*   Si el objeto es **mutable** (como una lista o un diccionario), los cambios realizados dentro de la función afectarán al objeto original fuera de ella.
+
+### 5. ¿Qué es una función `Lambda` en Python?
+
+Una **función `lambda`** es una función pequeña y anónima que se define mediante la palabra clave `lambda` en lugar de la instrucción estándar `def`. Estas funciones se conocen como **funciones literales** o **expresiones lambda**, y se caracterizan por su capacidad de ser definidas en una sola línea de código para realizar tareas específicas.
+
+A diferencia de las funciones convencionales, las funciones lambda tienen una estructura rígidamente simplificada:
+
+*   **Sin Identificador:** No requieren un nombre para ser definidas (son anónimas), aunque pueden asignarse a una variable si es necesario.  
+*   **Argumentos Ilimitados:** Pueden recibir cualquier número de parámetros de entrada, separados por comas.  
+*   **Expresión Única:** Solo pueden contener una única expresión lógica. No permiten bloques de código, sentencias múltiples ni el uso de instrucciones como `pass`, `assert` o `raise`.  
+*   **Retorno Implícito:** No utilizan la palabra clave `return`. El resultado de evaluar la expresión se devuelve automáticamente al invocador.
+
+**Sintaxis Fundamental:** `lambda argumentos: expresión`
+
+| # Función habitual def elevar_al_cuadrado(x):     return x ** 2 # Función con lambda cuadrado_lambda = lambda x: x ** 2  |
+| :---- |
+
+La verdadera potencia de las funciones lambda se manifiesta cuando se utilizan como argumentos dentro de **funciones de orden superior** (*Higher-Order Functions*). Estas son funciones que reciben otras funciones como parámetros:
+
+1.  **`map()`:** Aplica la lógica lambda a cada elemento de un iterable.  
+2.  **`filter()`:** Utiliza la expresión lambda como un predicado booleano para filtrar elementos de una colección.  
+3.  **`sorted()` / `sort()`:** Permite definir criterios de ordenamiento personalizados mediante el parámetro `key`.
+
+| # Ordenar una tuplas por el segundo elemento vengadores = [("Spiderman", 1962), ("Iron-man", 1963), ("CapitanAmerica", 1941)] vengadores_ordenados = sorted(vengadores, key=lambda vengador: vengador[1]) print(vengadores_ordenados)  |
+| :---- |
+
+### 6. ¿Qué es un paquete `pip`?
+
+Un paquete `pip` (Pip Installs Packages) es el sistema de gestión de paquetes estándar para Python. Permite instalar, actualizar y administrar bibliotecas o módulos adicionales que no vienen incluidos en la instalación estándar de Python.
+
+Un **paquete `pip`** es esencialmente un conjunto de archivos que contienen código útil desarrollado por la comunidad (como Pandas, Requests o Django) que puedes integrar fácilmente en tus proyectos.
+
+El funcionamiento de `pip` esta relacionado con **Python Package Index (`PyPI`)**, un repositorio centralizado que alberga paquetes de software de código abierto desarrollados por la comunidad.
+
+*   **Repositorio Central (`PyPI`):** Actúa como el servidor donde los desarrolladores publican su código.  
+*   **Cliente local (`pip`):** Es la herramienta de línea de comandos que se comunica con `PyPI` para descargar e instalar los paquetes solicitados.
+
+La relevancia técnica de `pip` reside en su capacidad para resolver **árboles de dependencias**. Cuando un desarrollador solicita la instalación de un paquete, `pip` no solo descarga dicho paquete, sino que identifica y descarga automáticamente todas las bibliotecas adicionales requeridas para que ese paquete funcione correctamente.
+
+#### Operaciones Fundamentales en la CLI:
+
+1.  **Instalación:** `pip install <nombre-paquete>`  
+2.  **Actualización:** `pip install --upgrade <nombre-paquete>`  
+3.  **Auditoría de Versiones:** `pip list` permite visualizar todas las dependencias instaladas en el entorno actual y sus versiones específicas.  
+4.  **Desinstalación:** `pip uninstall <nombre-paquete>`
+
+En entornos de desarrollo colaborativo, es necesario que todos los miembros del equipo utilicen las mismas versione. Para ello, `pip` permite exportar el estado actual del entorno mediante el comando `pip freeze > requirements.txt`.
+
+Este archivo actúa como un listado para un entorno de ejecución exacto con la instrucción: `pip install -r requirements.txt`
+
+Aunque `pip` puede instalar paquetes a nivel de sistema, la práctica recomendada en ingeniería de software es el uso de **entornos virtuales** (`venv` o `virtualenv`). Esto permite que `pip` gestione dependencias de forma aislada para cada proyecto, evitando conflictos de versiones entre diferentes aplicaciones alojadas en la misma infraestructura.
+
+## 
+
+## Ejercicios
+
+### 1. Bucle for en Python
+
+`for i in range(1, 6):`  
+    `print(f"Número: {i}")`
+
+### 2. Función de Suma con 3 Argumentos
+
+`def suma(a, b, c):`  
+    `return a + b + c`  
+`# Ejemplo:`  
+`resultado = suma(10, 20, 30)`  
+`print(f"El resultado de la suma es: {resultado}")`
+
+### 3. Función `Lambda` equivalente
+
+`suma_lambda = lambda a, b, c: a + b + c`  
+`# Ejemplo`   
+`print(f"Resultado con Lambda: {suma_lambda(10, 20, 30)}")`
+
+### 4. Verificación de valor en una lista
+
+**`nombre = "Enrique"`**  
+**`lista_nombre = ["Jessica", "Paul", "George", "Henry", "Adán"]`**  
+**# Modo A: Usando `in`**  
+**`if nombre in lista_nombre:`**  
+    **`print(f"{nombre} está en la lista.")`**  
+**`else:`**  
+    **`print(f"{nombre} NO está en la lista.")`**  
+**# Modo B: Con bucle '`for`'**  
+**`encontrado = False`**  
+**`for n in lista_nombre:`**  
+    **`if n == nombre:`**  
+        **`encontrado = True`**  
+        **`break`**  
+**`if encontrado:`**  
+    **`print(f"Bucle: {nombre} encontrado.")`**  
+**`else:`**  
+   ** `print(f"Bucle: {nombre} no coincide.")`**
